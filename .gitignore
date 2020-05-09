@@ -1,5 +1,11 @@
 #project
+
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
 .idea
-/gradlew
-/gradlew.bat
-/.gradle/
+*.iws
+*.iml
+*.ipr
+out/
