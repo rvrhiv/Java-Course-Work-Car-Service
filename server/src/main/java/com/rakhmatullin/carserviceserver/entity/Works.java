@@ -19,17 +19,14 @@ public class Works {
     private Date date_work;
 
     @ManyToOne(targetEntity = Masters.class)
-    @Column(name = "master_id")
     @NotNull(message = "Master is required.")
     private Masters master;
 
     @ManyToOne(targetEntity = Cars.class)
-    @Column(name = "car_id")
     @NotNull(message = "Car is required.")
     private Cars car;
 
     @ManyToOne(targetEntity = Services.class)
-    @Column(name = "service_id")
     @NotNull(message = "Service is required.")
     private Services service;
 

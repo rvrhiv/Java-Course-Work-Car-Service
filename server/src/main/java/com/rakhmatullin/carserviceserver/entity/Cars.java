@@ -9,7 +9,6 @@ public class Cars {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private long id;
 
     @Column(name = "num", nullable = false)
