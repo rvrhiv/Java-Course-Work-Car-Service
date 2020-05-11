@@ -2,7 +2,6 @@ package com.rakhmatullin.carserviceserver.entity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
@@ -11,11 +10,9 @@ import java.sql.Date;
 public class Works {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "date_work", nullable = false)
-    @NotBlank(message = "Work Date is required.")
     private Date date_work;
 
     @ManyToOne(targetEntity = Masters.class)

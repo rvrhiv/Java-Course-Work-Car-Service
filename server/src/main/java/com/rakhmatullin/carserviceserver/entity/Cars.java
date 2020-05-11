@@ -8,23 +8,18 @@ import javax.validation.constraints.NotBlank;
 public class Cars {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "num", nullable = false)
     @NotBlank(message = "Car number is required.")
     private String num;
 
-    @Column(name = "color", nullable = false)
     @NotBlank(message = "Car color is required.")
     private String color;
 
-    @Column(name = "mark", nullable = false)
     @NotBlank(message = "Car model(mark) is required.")
     private String mark;
 
-    @Column(name = "is_foreign", nullable = false)
-    @NotBlank(message = "Car origin is required.")
     private boolean is_foreign;
 
     public Cars() {

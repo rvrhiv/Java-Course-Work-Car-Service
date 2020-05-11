@@ -10,20 +10,15 @@ import javax.validation.constraints.NotBlank;
 public class Services {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false)
     @NotBlank(message = "Service Name is required.")
     private String name;
 
-    @Column(name = "cost_our", nullable = false)
-    @NotBlank(message = "The cost of the service is required.")
     @Min(value = 0, message = "Cost must be greater than zero or zero.")
     private int cost_our;
 
-    @Column(name = "cost_foreign", nullable = false)
-    @NotBlank(message = "The cost of the service is required.")
     @Min(value = 0, message = "Cost must be greater than zero or zero.")
     private int cost_foreign;
 

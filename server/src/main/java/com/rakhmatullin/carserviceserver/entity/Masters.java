@@ -9,10 +9,10 @@ import javax.validation.constraints.Size;
 public class Masters {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(length = 100)
     @NotBlank(message = "Master name required.")
     @Size(max = 100, message = "The name of Master can't be longer than 100 characters.")
     private String name;
