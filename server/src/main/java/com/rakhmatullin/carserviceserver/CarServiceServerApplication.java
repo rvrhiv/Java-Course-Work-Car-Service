@@ -23,7 +23,7 @@ public class CarServiceServerApplication {
     }
 
     @Bean
-    public CommandLineRunner testRun(CarsRepository carsRepository,
+    public CommandLineRunner initialValues(CarsRepository carsRepository,
                                   MastersRepository mastersRepository,
                                   ServicesRepository servicesRepository,
                                   WorksRepository worksRepository) {
