@@ -53,8 +53,12 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Services updateOil = new Services("update oil", 1000, 2000);
         Services washing = new Services("washing", 350, 550);
+        Services engineRepair = new Services("wngine repair", 8000, 10000);
+        Services wheelRepair = new Services("wheel repair", 3000, 5000);
         servicesRepository.save(updateOil);
         servicesRepository.save(washing);
+        servicesRepository.save(engineRepair);
+        servicesRepository.save(wheelRepair);
 
         Works work1 = new Works(Date.valueOf("2020-05-11"), alex, bmwI8, updateOil);
         Works work2 = new Works(Date.valueOf("2020-05-11"), alex, bmwI8, washing);
