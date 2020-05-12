@@ -28,10 +28,10 @@ public class CarServiceServerApplication {
                                   ServicesRepository servicesRepository,
                                   WorksRepository worksRepository) {
         return args -> {
+            worksRepository.deleteAll();
             carsRepository.deleteAll();
             mastersRepository.deleteAll();
             servicesRepository.deleteAll();
-            worksRepository.deleteAll();
 
             Cars bmwI8 = new Cars("A000AA00", "black", "BMW", true);
             Cars ladaVesta = new Cars("A001AA00", "blue", "LADA", false);
