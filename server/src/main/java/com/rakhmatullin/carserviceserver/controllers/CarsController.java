@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/Cars")
+@RequestMapping(path = "/api/cars")
 public class CarsController {
 
     private final CarsRepository carsRepository;
@@ -29,7 +29,7 @@ public class CarsController {
     }
 
     @GetMapping("/{id}")
-    public Cars getCar(@PathVariable Long id) {
+    public Cars getCarById(@PathVariable Long id) {
         return carsRepository.findById(id)
                 .orElseThrow(() -> new CarsNotFoundException(id));
     }
@@ -41,7 +41,7 @@ public class CarsController {
     }
 
     @PutMapping("/{id}")
-    public Cars updateCar(@RequestBody Cars car, @PathVariable Long id) {
+    public Cars updateCar(@Valid @RequestBody Cars car, @PathVariable Long id) {
         return carsRepository.findById(id)
                 .map(a -> {
                     a.setColor(car.getColor());
