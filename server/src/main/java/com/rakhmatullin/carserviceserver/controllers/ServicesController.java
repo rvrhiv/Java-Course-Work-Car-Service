@@ -5,6 +5,7 @@ import com.rakhmatullin.carserviceserver.exception.ServicesNotFoundException;
 import com.rakhmatullin.carserviceserver.repository.ServicesRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/services")
+@RequestMapping(path = "/api/services", produces = "application/json")
 public class ServicesController {
 
     private final ServicesRepository servicesRepository;
@@ -33,13 +34,13 @@ public class ServicesController {
                 .orElseThrow(() -> new ServicesNotFoundException(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Services newService(@Valid @RequestBody Services services) {
         return servicesRepository.save(services);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = "application/json")
     public Services updateService(@Valid @RequestBody Services service, @PathVariable Long id) {
         return servicesRepository.findById(id)
                 .map(a -> {
@@ -55,7 +56,11 @@ public class ServicesController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteService(@PathVariable Long id) {
-        servicesRepository.deleteById(id);
+        try {
+            servicesRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ignored) {
+        }
     }
 }

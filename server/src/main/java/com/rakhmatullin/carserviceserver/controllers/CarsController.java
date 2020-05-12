@@ -6,6 +6,7 @@ import com.rakhmatullin.carserviceserver.exception.CarsNotFoundException;
 import com.rakhmatullin.carserviceserver.repository.CarsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/cars")
+@RequestMapping(path = "/api/cars", produces = "application/json")
 public class CarsController {
 
     private final CarsRepository carsRepository;
@@ -34,13 +35,13 @@ public class CarsController {
                 .orElseThrow(() -> new CarsNotFoundException(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Cars newCar(@Valid @RequestBody Cars newCar) {
         return carsRepository.save(newCar);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = "application/json")
     public Cars updateCar(@Valid @RequestBody Cars car, @PathVariable Long id) {
         return carsRepository.findById(id)
                 .map(a -> {
@@ -57,7 +58,11 @@ public class CarsController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCar(@PathVariable Long id) {
-        carsRepository.deleteById(id);
+        try {
+            carsRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ignored) {
+        }
     }
 }
