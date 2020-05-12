@@ -67,7 +67,7 @@ public class Cars {
         this.mark = mark;
     }
 
-    public boolean isIs_foreign() {
+    public boolean is_foreign() {
         return is_foreign;
     }
 
