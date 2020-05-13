@@ -16,7 +16,6 @@ class MainPage extends Component {
         this.setState({
             whichButton: buttonName
         })
-        console.log(buttonName + " from MainPage")
     }
 
     render() {
