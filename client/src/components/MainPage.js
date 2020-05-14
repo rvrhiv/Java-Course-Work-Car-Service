@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import TopBar from "./TopBar";
 import Menu from "./Menu";
 import PageContent from "./PageContent";
+import "bootstrap/dist/css/bootstrap.css";
 
 class MainPage extends Component {
     constructor(props) {
@@ -22,8 +23,17 @@ class MainPage extends Component {
         return (
             <div>
                 <TopBar />
-                <Menu buttonMenuClick={this.buttonMenuClick} />
-                <PageContent whichContent={this.state.whichButton} />
+                <div className="container" style={{background: '#a6ff85'}}>
+                    <div className="row">
+                        <div className="col-md-4 col-sm-4" style={{background: '#fff87a'}}>
+                            <h3>Select a table</h3>
+                            <Menu buttonMenuClick={this.buttonMenuClick} />
+                        </div>
+                        <div className="col-md-8 col-sm-8">
+                            <PageContent whichContent={this.state.whichButton} />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
