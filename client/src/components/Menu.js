@@ -12,16 +12,10 @@ class Menu extends Component {
     constructor(props) {
         super(props);
         this.handleClickItem = this.handleClickItem.bind(this);
-        this.state = {
-            activeButton : this.props.activeButton
-        }
     }
 
     handleClickItem(selectedKey) {
         this.props.buttonMenuClick(selectedKey)
-        this.setState({
-            activeButton : selectedKey
-        })
     }
 
     render() {
@@ -32,8 +26,7 @@ class Menu extends Component {
                     justify
                     variant="pills"
                     className="flex-column"
-                    defaultActiveKey={this.state.activeButton}
-                    activeKey={this.state.activeButton}
+                    activeKey={this.props.activeButton}
                     onSelect={this.handleClickItem}
                 >
                     {menuOptions.map((option) => (
