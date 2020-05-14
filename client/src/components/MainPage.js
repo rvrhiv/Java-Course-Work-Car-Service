@@ -16,9 +16,11 @@ class MainPage extends Component {
     }
 
     buttonMenuClick(buttonName) {
-        this.setState({
-            whichButton: buttonName
-        })
+        if (buttonName !== this.state.whichButton) {
+            this.setState({
+                whichButton: buttonName
+            })
+        }
     }
 
     render() {
@@ -28,7 +30,7 @@ class MainPage extends Component {
 
                 <div style={{background: 'none'}} className="mt-5 container-lg">
                     <Row>
-                        <Col md="3" sm="3" style={{background: '#fff87a'}}>
+                        <Col md="3" sm="3" style={{background: 'none'}}>
                             <h3 style={{textAlign: 'center'}}>Select a table</h3>
                             <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
                         </Col>
