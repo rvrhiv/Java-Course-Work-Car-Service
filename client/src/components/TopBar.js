@@ -10,7 +10,7 @@ class TopBar extends Component {
     render() {
         return (
             <div>
-                <Navbar bg="light">
+                <Navbar bg="light" variant="light" className="bg-primary">
                     <Navbar.Brand>
                         Car Service
                     </Navbar.Brand>

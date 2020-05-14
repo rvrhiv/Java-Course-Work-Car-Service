@@ -3,6 +3,8 @@ import TopBar from "./TopBar";
 import Menu from "./Menu";
 import PageContent from "./PageContent";
 import "bootstrap/dist/css/bootstrap.css";
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
 
 class MainPage extends Component {
     constructor(props) {
@@ -23,16 +25,17 @@ class MainPage extends Component {
         return (
             <div>
                 <TopBar />
-                <div className="container" style={{background: '#a6ff85'}}>
-                    <div className="row">
-                        <div className="col-md-3 col-sm-3" style={{background: '#fff87a'}}>
-                            <h3>Select a table</h3>
+
+                <div style={{background: '#a6ff85'}} className="mt-5 container-lg">
+                    <Row>
+                        <Col md="3" sm="3" style={{background: '#fff87a'}}>
+                            <h3 style={{textAlign: 'center'}}>Select a table</h3>
                             <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
-                        </div>
-                        <div className="col-md-8 col-sm-8">
+                        </Col>
+                        <Col md="8" sm="8">
                             <PageContent whichContent={this.state.whichButton} />
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </div>
             </div>
         );

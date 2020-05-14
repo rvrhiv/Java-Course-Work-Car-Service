@@ -30,8 +30,13 @@ class Menu extends Component {
                     onSelect={this.handleClickItem}
                 >
                     {menuOptions.map((option) => (
-                        <Nav.Item>
-                            <Nav.Link eventKey={option.name}>{option.value}</Nav.Link>
+                        <Nav.Item key={option.name} className="mb-1">
+                            <Nav.Link
+                                eventKey={option.name}
+                                style={{textAlign: 'left'}}
+                            >
+                                {option.value}
+                            </Nav.Link>
                         </Nav.Item>
                     ))}
                 </Nav>
