@@ -11,18 +11,16 @@ const menuOptions = [
 class Menu extends Component {
     constructor(props) {
         super(props);
-        this.handleClickButton = this.handleClickButton.bind(this);
+        this.handleClickItem = this.handleClickItem.bind(this);
         this.state = {
-            activeButton : "cars"
+            activeButton : this.props.activeButton
         }
     }
 
-    handleClickButton(event) {
-        console.log(event)
-        let name = event.target.name;
-        this.props.buttonMenuClick(name)
+    handleClickItem(selectedKey) {
+        this.props.buttonMenuClick(selectedKey)
         this.setState({
-            activeButton : name
+            activeButton : selectedKey
         })
     }
 
@@ -30,17 +28,19 @@ class Menu extends Component {
         return (
             <div>
                 <Nav
+                    fill
+                    justify
                     variant="pills"
-                    defaultActiveKey={"/" + this.state.activeButton}
-                    activeKey={"/" + this.state.activeButton}
-                    onSelect={(selectedKey) => console.log(`selected ${selectedKey}`)}
+                    className="flex-column"
+                    defaultActiveKey={this.state.activeButton}
+                    activeKey={this.state.activeButton}
+                    onSelect={this.handleClickItem}
                 >
-                    <Nav.Item>
-                        <Nav.Link eventKey="cars">Cars</Nav.Link>
-                    </Nav.Item>
-                    {/*{menuOptions.map((option) => (*/}
-                    {/*    <NavItem key={option.name} name={option.name}>{option.value}</NavItem>*/}
-                    {/*))}*/}
+                    {menuOptions.map((option) => (
+                        <Nav.Item>
+                            <Nav.Link eventKey={option.name}>{option.value}</Nav.Link>
+                        </Nav.Item>
+                    ))}
                 </Nav>
             </div>
         );

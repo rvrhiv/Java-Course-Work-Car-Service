@@ -25,9 +25,9 @@ class MainPage extends Component {
                 <TopBar />
                 <div className="container" style={{background: '#a6ff85'}}>
                     <div className="row">
-                        <div className="col-md-4 col-sm-4" style={{background: '#fff87a'}}>
+                        <div className="col-md-3 col-sm-3" style={{background: '#fff87a'}}>
                             <h3>Select a table</h3>
-                            <Menu buttonMenuClick={this.buttonMenuClick} />
+                            <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
                         </div>
                         <div className="col-md-8 col-sm-8">
                             <PageContent whichContent={this.state.whichButton} />
