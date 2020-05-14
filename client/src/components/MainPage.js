@@ -26,14 +26,14 @@ class MainPage extends Component {
             <div>
                 <TopBar />
 
-                <div style={{background: '#a6ff85'}} className="mt-5 container-lg">
+                <div style={{background: 'none'}} className="mt-5 container-lg">
                     <Row>
                         <Col md="3" sm="3" style={{background: '#fff87a'}}>
                             <h3 style={{textAlign: 'center'}}>Select a table</h3>
                             <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
                         </Col>
                         <Col md="8" sm="8">
-                            <PageContent whichContent={this.state.whichButton} />
+                            <PageContent whichContent={this.state.whichButton}/>
                         </Col>
                     </Row>
                 </div>
