@@ -12,7 +12,14 @@ const tableMasters = ["name"];
 
 const tableServices = [ "name", "cost_foreign", "cost_our"];
 
-const tableWorks = ["date_work", "car1", "master1", "service1"];
+const tableWorks = ["date_work", "master", "service", "car"];
+
+const tables = {
+    cars: ["color", "_foreign", "mark", "num"],
+    masters: ["name"],
+    services: ["name", "cost_foreign", "cost_our"],
+    works: ["date_work", "master", "service", "car"]
+}
 
 class Table extends Component {
     constructor(props) {
@@ -40,7 +47,6 @@ class Table extends Component {
         this.pagination = paginationFactory({
             hideSizePerPage: true,
             hidePageListOnlyOnePage: true,
-
         });
 
         this.cellEdit = cellEditFactory({
@@ -55,28 +61,43 @@ class Table extends Component {
 
     async componentDidMount() {
         await this.setLoadedData(this.props.whichTable);
-        console.log("MOUNT! ");
     }
 
     async componentDidUpdate(prevProps) {
         if (this.props.whichTable !== prevProps.whichTable) {
             await this.setLoadedData(this.props.whichTable);
-            console.log("Update!");
         }
     }
 
-    async setLoadedData(whithTable) {
+    async setLoadedData(whichTable) {
         try {
             const data = [];
-            await loadTableData(whithTable).then(array => {
+            await loadTableData(whichTable).then(array => {
                 array.forEach(object => {
                     data.push(object);
                  })
             });
             this.insertColumnsInTable();
-            this.setState({
-                loadedData: data
-            })
+            if (whichTable === "works") {
+                //меняем поля-объекты на определенные поля этих объектов
+                const workData = [];
+                data.map(item => (
+                    workData.push({
+                        id: item.id,
+                        date_work: item.date_work,
+                        car: item.car.num,
+                        master: item.master.name,
+                        service: item.service.name
+                    })
+                ));
+                this.setState({
+                    loadedData: workData
+                });
+            } else {
+                this.setState({
+                    loadedData: data
+                });
+            }
         } catch (error) {
             console.log(error);
         }
@@ -84,22 +105,7 @@ class Table extends Component {
 
     insertColumnsInTable() {
         this.columns = this.columns.slice(0, 1);
-        switch (this.props.whichTable) {
-            case "cars":
-                this.initColumns(tableCars);
-                break;
-            case "masters":
-                this.initColumns(tableMasters);
-                break;
-            case "services":
-                this.initColumns(tableServices);
-                break;
-            case "works":
-                this.initColumns(tableWorks);
-                break;
-            default:
-        }
-
+        this.initColumns(tables[this.props.whichTable]);
     }
 
     initColumns = (columnsArray) => {
@@ -121,7 +127,7 @@ class Table extends Component {
     }
 
     validatorColumns(newValue, row, column) {
-        if (newValue.toString().length >= 26) {
+        if (newValue.toString().length >= 100) {
             return {
                 valid: false,
                 message: "Too many characters!"
@@ -139,8 +145,8 @@ class Table extends Component {
     }
 
     render() {
-        console.log(this.state.loadedData);
-        console.log("RENDER!");
+        // console.log(this.state.loadedData);
+        // console.log("RENDER!");
         return (
             <div>
                 <h1 style={{textAlign: 'left'}}>{this.props.whichTable}</h1>

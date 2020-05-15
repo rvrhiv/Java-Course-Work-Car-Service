@@ -46,14 +46,16 @@ public class DatabaseLoader implements CommandLineRunner {
         carsRepository.save(bmwI8);
         carsRepository.save(ladaVesta);
 
-        Masters alex = new Masters("Alex");
-        Masters ilya = new Masters("Ilya");
+        Masters alex = new Masters("Alex Rakhmatullin");
+        Masters ilya = new Masters("Ilya Gusarov");
+        Masters vlad = new Masters("Vladislav Zibkin");
         mastersRepository.save(alex);
         mastersRepository.save(ilya);
+        mastersRepository.save(vlad);
 
         Services updateOil = new Services("update oil", 1000, 2000);
         Services washing = new Services("washing", 350, 550);
-        Services engineRepair = new Services("wngine repair", 8000, 10000);
+        Services engineRepair = new Services("engine repair", 8000, 10000);
         Services wheelRepair = new Services("wheel repair", 3000, 5000);
         servicesRepository.save(updateOil);
         servicesRepository.save(washing);
@@ -62,10 +64,12 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Works work1 = new Works(Date.valueOf("2020-05-11"), alex, bmwI8, updateOil);
         Works work2 = new Works(Date.valueOf("2020-05-11"), alex, bmwI8, washing);
-        Works work3 = new Works(Date.valueOf("2020-05-12"), ilya, ladaVesta, washing);
+        Works work3 = new Works(Date.valueOf("2020-05-12"), ilya, ladaVesta, wheelRepair);
+        Works work4 = new Works(Date.valueOf("2020-05-13"), vlad, ladaVesta, engineRepair);
 
         worksRepository.save(work1);
         worksRepository.save(work2);
         worksRepository.save(work3);
+        worksRepository.save(work4);
     }
 }
