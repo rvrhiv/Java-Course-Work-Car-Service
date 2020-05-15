@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Nav from "react-bootstrap/Nav";
+import "bootswatch/dist/litera/bootstrap.css"
 
 const menuOptions = [
     {name: 'cars', value: "Cars"},

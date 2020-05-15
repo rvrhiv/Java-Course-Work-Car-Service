@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import TopBar from "./TopBar";
 import Menu from "./Menu";
 import PageContent from "./PageContent";
-import "bootstrap/dist/css/bootstrap.css";
+import "bootswatch/dist/litera/bootstrap.css"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 

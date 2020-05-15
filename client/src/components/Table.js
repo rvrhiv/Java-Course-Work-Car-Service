@@ -5,20 +5,11 @@ import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory from "react-bootstrap-table2-paginator"
 import cellEditFactory from 'react-bootstrap-table2-editor';
 
-
-const tableCars = ["color", "_foreign", "mark", "num"];
-
-const tableMasters = ["name"];
-
-const tableServices = [ "name", "cost_foreign", "cost_our"];
-
-const tableWorks = ["date_work", "master", "service", "car"];
-
 const tables = {
-    cars: ["color", "_foreign", "mark", "num"],
-    masters: ["name"],
-    services: ["name", "cost_foreign", "cost_our"],
-    works: ["date_work", "master", "service", "car"]
+    cars: [{dataField: "color", name: "Color"}, {dataField: "_foreign", name: "Foreign"}, {dataField: "mark", name: "Mark"}, {dataField: "num", name: "Number"}],
+    masters: [{dataField: "name", name: "Name"}],
+    services: [{dataField: "name", name: "Name"}, {dataField: "cost_foreign", name: "Cost for foreign"}, {dataField: "cost_our", name: "Cost for our"}],
+    works: [{dataField: "date_work", name: "Date of work"}, {dataField: "master", name: "Master"}, {dataField: "service", name: "Service"}, {dataField: "car", name: "Car"}]
 }
 
 class Table extends Component {
@@ -29,6 +20,8 @@ class Table extends Component {
         this.handleBeforeSaveCell = this.handleBeforeSaveCell.bind(this);
         this.setLoadedData = this.setLoadedData.bind(this);
         this.insertColumnsInTable = this.insertColumnsInTable.bind(this);
+
+        this.rowObjectSelect = null;
 
         this.state = {
             loadedData: []
@@ -50,13 +43,28 @@ class Table extends Component {
         });
 
         this.cellEdit = cellEditFactory({
-            mode: 'click',
+            mode: 'dbclick',
             blurToSave: true,
             autoSelectText: true,
             onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!'); },
             beforeSaveCell: this.handleBeforeSaveCell,
             afterSaveCell: (oldValue, newValue, row, column) => { console.log('After Saving Cell!!'); }
         });
+
+        this.selectRow = {
+            mode: "radio",
+            clickToSelect: true,
+            clickToEdit: true,
+            hideSelectColumn: true,
+            style: {background: '#59a9ff'},
+            selected: [],
+            onSelect: (row, isSelect, rowIndex, e) => {
+                if (isSelect) {
+                    this.rowObjectSelect = row;
+                }
+                console.log(this.rowObjectSelect);
+            }
+        }
     }
 
     async componentDidMount() {
@@ -67,6 +75,7 @@ class Table extends Component {
         if (this.props.whichTable !== prevProps.whichTable) {
             await this.setLoadedData(this.props.whichTable);
         }
+        this.rowObjectSelect = null;
     }
 
     async setLoadedData(whichTable) {
@@ -109,10 +118,10 @@ class Table extends Component {
     }
 
     initColumns = (columnsArray) => {
-        columnsArray.forEach(name => {
+        columnsArray.forEach(item => {
             this.columns.push({
-                dataField: name,
-                text: name,
+                dataField: item.dataField,
+                text: item.name,
                 sort: true,
                 validator: this.validatorColumns,
                 headerStyle: {
@@ -159,6 +168,7 @@ class Table extends Component {
                     bordered={false}
                     pagination={this.state.loadedData.length <= 10 ? "" : this.pagination}
                     cellEdit={this.cellEdit}
+                    selectRow={this.selectRow}
                     hover
                 />
             </div>
