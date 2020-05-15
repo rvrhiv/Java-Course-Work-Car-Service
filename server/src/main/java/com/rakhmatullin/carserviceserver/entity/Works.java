@@ -17,27 +17,27 @@ public class Works {
 
     @ManyToOne(targetEntity = Masters.class)
     @NotNull(message = "Master is required.")
-    private Masters master;
+    private Masters masters;
 
     @ManyToOne(targetEntity = Cars.class)
     @NotNull(message = "Car is required.")
-    private Cars car;
+    private Cars cars;
 
     @ManyToOne(targetEntity = Services.class)
     @NotNull(message = "Service is required.")
-    private Services service;
+    private Services services;
 
     public Works() {
     }
 
     public Works(Date date_work,
-                 Masters master,
-                 Cars car,
-                 Services service) {
+                 Masters masters,
+                 Cars cars,
+                 Services services) {
         this.date_work = date_work;
-        this.master = master;
-        this.car = car;
-        this.service = service;
+        this.masters = masters;
+        this.cars = cars;
+        this.services = services;
     }
 
     public long getId() {
@@ -57,27 +57,27 @@ public class Works {
     }
 
     public Masters getMaster() {
-        return master;
+        return masters;
     }
 
-    public void setMaster(Masters master) {
-        this.master = master;
+    public void setMaster(Masters masters) {
+        this.masters = masters;
     }
 
     public Cars getCar() {
-        return car;
+        return cars;
     }
 
-    public void setCar(Cars car) {
-        this.car = car;
+    public void setCar(Cars cars) {
+        this.cars = cars;
     }
 
     public Services getService() {
-        return service;
+        return services;
     }
 
-    public void setService(Services service) {
-        this.service = service;
+    public void setService(Services services) {
+        this.services = services;
     }
 
     @Override
@@ -85,9 +85,9 @@ public class Works {
         return "Works{" +
                 "id=" + id +
                 ", date_work=" + date_work +
-                ", master=" + master +
-                ", car=" + car +
-                ", service=" + service +
+                ", master=" + masters +
+                ", car=" + cars +
+                ", service=" + services +
                 '}';
     }
 }

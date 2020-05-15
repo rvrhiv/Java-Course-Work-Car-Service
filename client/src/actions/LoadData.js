@@ -1,5 +1,5 @@
 
-export async function loadTableData(tableName) {
+export async function loadData(tableName) {
     const response = await fetch('/api/' + tableName, {
         method: "GET",
         dataType: "JSON",

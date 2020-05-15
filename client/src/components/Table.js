@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import {loadTableData} from "../actions/LoadTableData"
+import {loadData} from "../actions/LoadData"
+import {deleteData} from "../actions/DeleteData";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory from "react-bootstrap-table2-paginator"
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import Button from "react-bootstrap/Button";
 
 const tables = {
     cars: [{dataField: "color", name: "Color"}, {dataField: "_foreign", name: "Foreign"}, {dataField: "mark", name: "Mark"}, {dataField: "num", name: "Number"}],
@@ -20,6 +22,7 @@ class Table extends Component {
         this.handleBeforeSaveCell = this.handleBeforeSaveCell.bind(this);
         this.setLoadedData = this.setLoadedData.bind(this);
         this.insertColumnsInTable = this.insertColumnsInTable.bind(this);
+        this.handleClickDeleteButton = this.handleClickDeleteButton.bind(this);
 
         this.rowObjectSelect = null;
 
@@ -62,7 +65,6 @@ class Table extends Component {
                 if (isSelect) {
                     this.rowObjectSelect = row;
                 }
-                console.log(this.rowObjectSelect);
             }
         }
     }
@@ -72,7 +74,7 @@ class Table extends Component {
     }
 
     async componentDidUpdate(prevProps) {
-        if (this.props.whichTable !== prevProps.whichTable) {
+        if (this.props !== prevProps) {
             await this.setLoadedData(this.props.whichTable);
         }
         this.rowObjectSelect = null;
@@ -81,7 +83,7 @@ class Table extends Component {
     async setLoadedData(whichTable) {
         try {
             const data = [];
-            await loadTableData(whichTable).then(array => {
+            await loadData(whichTable).then(array => {
                 array.forEach(object => {
                     data.push(object);
                  })
@@ -153,6 +155,14 @@ class Table extends Component {
         console.log('Before Saving Cell!!');
     }
 
+    async handleClickDeleteButton() {
+        if (this.rowObjectSelect !== null) {
+            await deleteData(this.props.whichTable, this.rowObjectSelect.id).then()
+                .catch(message => console.log(message));
+            await this.setLoadedData(this.props.whichTable);
+        }
+    }
+
     render() {
         // console.log(this.state.loadedData);
         // console.log("RENDER!");
@@ -171,6 +181,7 @@ class Table extends Component {
                     selectRow={this.selectRow}
                     hover
                 />
+                <Button variant="danger" onClick={this.handleClickDeleteButton}>Delete</Button>
             </div>
         );
     }
