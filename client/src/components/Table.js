@@ -158,7 +158,7 @@ class Table extends Component {
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
             await deleteData(this.props.whichTable, this.rowObjectSelect.id).then()
-                .catch(message => console.log(message));
+                .catch(() => console.log("deleted"));
             await this.setLoadedData(this.props.whichTable);
         }
     }
