@@ -43,7 +43,7 @@ class FormMastersTable extends React.Component{
                             required
                             type="text"
                             name="first_name"
-                            pattern="^[a-zA-Zа-яА-Я]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я]{1,20}"
                             placeholder="First Name"
                             autoComplete="off"
                         />
@@ -58,7 +58,7 @@ class FormMastersTable extends React.Component{
                             required
                             type="text"
                             name="last_name"
-                            pattern="^[a-zA-Zа-яА-Я]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я]{1,20}"
                             placeholder="Last Name"
                             autoComplete="off"
                         />

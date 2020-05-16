@@ -45,7 +45,7 @@ class FormCarsTable extends React.Component{
                             required
                             type="text"
                             name="color"
-                            pattern="^[a-zA-Zа-яА-Я0-9\s]{1,40}"
+                            pattern="^[#]?[a-zA-Zа-яА-Я0-9\s]{1,40}"
                             placeholder="Color"
                             autoComplete="off"
                         />

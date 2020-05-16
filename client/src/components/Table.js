@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {loadData} from "../actions/LoadData"
 import {deleteData} from "../actions/DeleteData";
+import {updateData} from "../actions/UpdateData";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory from "react-bootstrap-table2-paginator"
@@ -24,7 +25,6 @@ class Table extends Component {
         this.setLoadedData = this.setLoadedData.bind(this);
         this.insertColumnsInTable = this.insertColumnsInTable.bind(this);
         this.handleClickDeleteButton = this.handleClickDeleteButton.bind(this);
-        this.handleClickAddButton = this.handleClickAddButton.bind(this);
 
         this.rowObjectSelect = null;
 
@@ -52,9 +52,10 @@ class Table extends Component {
             mode: 'dbclick',
             blurToSave: true,
             autoSelectText: true,
-            onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!'); },
+            editable: false,
+            //onStartEdit: (row, column, rowIndex, columnIndex) => { console.log('start to edit!!!'); },
             beforeSaveCell: this.handleBeforeSaveCell,
-            afterSaveCell: (oldValue, newValue, row, column) => { console.log('After Saving Cell!!'); }
+            //afterSaveCell: (oldValue, newValue, row, column) => { console.log('After Saving Cell!!'); }
         });
 
         this.selectRow = {
@@ -128,6 +129,7 @@ class Table extends Component {
                 dataField: item.dataField,
                 text: item.name,
                 sort: true,
+                editable: this.props.whichTable !== "works",
                 validator: this.validatorColumns,
                 headerStyle: {
                     outline: 'none'
@@ -141,7 +143,7 @@ class Table extends Component {
     }
 
     validatorColumns(newValue, row, column) {
-        if (newValue.toString().length >= 100) {
+        if (newValue.toString().length >= 40) {
             return {
                 valid: false,
                 message: "Too many characters!"
@@ -150,12 +152,86 @@ class Table extends Component {
         return true;
     }
 
-    handleBeforeSaveCell(oldValue, newValue, row, column) {
-        //сделать confirm Bootstrap window (мб сделать новый класс)
-        // let log = window.confirm('Do you want to accept this change?');
-        // console.log(log);
-        // return log;
-        console.log('Before Saving Cell!!');
+    handleBeforeSaveCell(oldValue, newValue, row, column, done) {
+        var isValidEdit = false;
+        switch (this.props.whichTable) {
+            case "cars":
+                if (this.checkValidCarsTableEdit(newValue, column.dataField)) {
+                    row[column.dataField] = newValue;
+                    updateData(this.props.whichTable, {
+                        id: row.id,
+                        num: row.num,
+                        color: row.color,
+                        mark: row.mark,
+                        is_foreign: row._foreign
+                    });
+                    isValidEdit = true;
+                }
+                break;
+            case "masters":
+                if (this.checkValidMastersTableEdit(newValue, column.dataField)) {
+                    row[column.dataField] = newValue;
+                    updateData(this.props.whichTable, {
+                        id: row.id,
+                        name: row.name
+                    });
+                    isValidEdit = true;
+                }
+                break;
+            case "services":
+                if (this.checkValidServicesTableEdit(newValue, column.dataField)) {
+                    row[column.dataField] = newValue;
+                    updateData(this.props.whichTable, {
+                        id: row.id,
+                        name: row.name,
+                        cost_our: row.cost_our,
+                        cost_foreign: row.cost_foreign
+                    });
+                    isValidEdit = true;
+                }
+                break;
+        }
+        setTimeout(() => {
+            done(isValidEdit);
+        }, 0);
+        return {async: true};
+    }
+
+    checkValidCarsTableEdit = (newValue, dataField) => {
+        switch (dataField) {
+            case "color":
+                return (/^[#]?[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
+            case "mark":
+                return (/^[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
+            case "num":
+                return (/^[a-zA-Z0-9-]{1,40}/.test(newValue));
+            case "_foreign":
+                return (/(true|false)/.test(newValue));
+            default:
+                return false;
+        }
+    }
+
+    checkValidMastersTableEdit = (newValue, dataField) => {
+        switch (dataField) {
+            case "name":
+                return (/^[a-zA-Zа-яА-Я]{1,20}[\s]?[a-zA-Zа-яА-Я]{1,20}/.test(newValue));
+            default:
+                return false;
+        }
+    }
+
+    checkValidServicesTableEdit = (newValue, dataField) => {
+        switch (dataField) {
+            case "name":
+                return (/^[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
+            case "cost_foreign":
+                return (/^[0-9]{1,10}/.test(newValue));
+            case "cost_our":
+                return (/^[0-9]{1,10}/.test(newValue));
+            default:
+                return false;
+        }
     }
 
     async handleClickDeleteButton() {
@@ -166,13 +242,7 @@ class Table extends Component {
         }
     }
 
-    handleClickAddButton() {
-
-    }
-
     render() {
-        // console.log(this.state.loadedData);
-        // console.log("RENDER!");
         return (
             <div>
                 <h1 style={{textAlign: 'left'}}>{this.props.whichTable}</h1>
