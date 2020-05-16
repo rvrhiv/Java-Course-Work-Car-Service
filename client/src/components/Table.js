@@ -6,6 +6,7 @@ import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory from "react-bootstrap-table2-paginator"
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import Button from "react-bootstrap/Button";
+import NewItemModal from "./modals/NewItemModal";
 
 const tables = {
     cars: [{dataField: "color", name: "Color"}, {dataField: "_foreign", name: "Foreign"}, {dataField: "mark", name: "Mark"}, {dataField: "num", name: "Number"}],
@@ -23,11 +24,13 @@ class Table extends Component {
         this.setLoadedData = this.setLoadedData.bind(this);
         this.insertColumnsInTable = this.insertColumnsInTable.bind(this);
         this.handleClickDeleteButton = this.handleClickDeleteButton.bind(this);
+        this.handleClickAddButton = this.handleClickAddButton.bind(this);
 
         this.rowObjectSelect = null;
 
         this.state = {
-            loadedData: []
+            loadedData: [],
+            modalShow: false
         }
 
         this.columns = [{
@@ -163,6 +166,10 @@ class Table extends Component {
         }
     }
 
+    handleClickAddButton() {
+
+    }
+
     render() {
         // console.log(this.state.loadedData);
         // console.log("RENDER!");
@@ -181,7 +188,14 @@ class Table extends Component {
                     selectRow={this.selectRow}
                     hover
                 />
+                <Button variant="primary" onClick={() => this.setState({modalShow: true})}>New Item</Button>{' '}
                 <Button variant="danger" onClick={this.handleClickDeleteButton}>Delete</Button>
+
+                <NewItemModal
+                    show={this.state.modalShow}
+                    onHide={() => this.setState({modalShow: false})}
+                    whichTable={this.props.whichTable}
+                />
             </div>
         );
     }
