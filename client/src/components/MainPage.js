@@ -11,8 +11,12 @@ class MainPage extends Component {
         super(props);
         this.buttonMenuClick = this.buttonMenuClick.bind(this);
         this.state = {
-            whichButton: 'cars'
+            whichButton: sessionStorage.getItem("whichButton")
         }
+    }
+
+    componentDidMount() {
+        sessionStorage.setItem("whichButton", "cars");
     }
 
     buttonMenuClick(buttonName) {
@@ -20,6 +24,7 @@ class MainPage extends Component {
             this.setState({
                 whichButton: buttonName
             })
+            sessionStorage.setItem("whichButton", buttonName);
         }
     }
 
@@ -32,10 +37,10 @@ class MainPage extends Component {
                     <Row>
                         <Col md="3" sm="3" style={{background: 'none'}}>
                             <h3 style={{textAlign: 'center'}}>Select a table</h3>
-                            <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
+                            <Menu buttonMenuClick={this.buttonMenuClick} activeButton={sessionStorage.getItem("whichButton")}/>
                         </Col>
                         <Col md="8" sm="8">
-                            <PageContent whichContent={this.state.whichButton}/>
+                            <PageContent whichContent={sessionStorage.getItem("whichButton")}/>
                         </Col>
                     </Row>
                 </div>
