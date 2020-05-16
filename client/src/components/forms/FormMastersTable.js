@@ -43,7 +43,7 @@ class FormMastersTable extends React.Component{
                             required
                             type="text"
                             name="first_name"
-                            pattern="^[a-zA-Z]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я]{1,40}"
                             placeholder="First Name"
                             autoComplete="off"
                         />
@@ -52,13 +52,13 @@ class FormMastersTable extends React.Component{
                             This field is required! Maximum length 40 characters.
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group as={Col} md="6" controlId="validationCustom01">
+                    <Form.Group as={Col} md="6" controlId="validationCustom02">
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control
                             required
                             type="text"
                             name="last_name"
-                            pattern="^[a-zA-Z]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я]{1,40}"
                             placeholder="Last Name"
                             autoComplete="off"
                         />
