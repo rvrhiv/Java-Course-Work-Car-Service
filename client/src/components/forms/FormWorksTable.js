@@ -127,6 +127,7 @@ class FormWorksTable extends React.Component{
                     <Form.Group as={Col} controlId="carSelect">
                         <Form.Label>Car</Form.Label>
                         <Form.Control
+                            required
                             as="select"
                             name="carsSelect"
                         >
@@ -138,6 +139,7 @@ class FormWorksTable extends React.Component{
                     <Form.Group as={Col} controlId="mastersSelect">
                         <Form.Label>Master</Form.Label>
                         <Form.Control
+                            required
                             as="select"
                             name="mastersSelect"
                         >
@@ -149,6 +151,7 @@ class FormWorksTable extends React.Component{
                     <Form.Group as={Col} controlId="servicesSelect">
                         <Form.Label>Service</Form.Label>
                         <Form.Control
+                            required
                             as="select"
                             name="servicesSelect"
                         >
