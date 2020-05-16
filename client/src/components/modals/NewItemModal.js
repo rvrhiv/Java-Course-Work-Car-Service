@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import FormCarsTable from "../forms/FormCarsTable";
 import FormMastersTable from "../forms/FormMastersTable";
 import FormServicesTable from "../forms/FormServicesTable";
+import FormWorksTable from "../forms/FormWorksTable";
 
 function NewItemModal(props) {
     const {whichTable, ...rest} = props;
@@ -12,7 +13,7 @@ function NewItemModal(props) {
         cars: () => <FormCarsTable onHide={props.onHide} whichTable={whichTable}/>,
         masters: () => <FormMastersTable onHide={props.onHide} whichTable={whichTable}/>,
         services: () => <FormServicesTable onHide={props.onHide} whichTable={whichTable}/>,
-        works: () => null
+        works: () => <FormWorksTable onHide={props.onHide} whitchTable={whichTable}/>
     };
 
     return (

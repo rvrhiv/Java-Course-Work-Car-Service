@@ -45,7 +45,7 @@ class FormCarsTable extends React.Component{
                             required
                             type="text"
                             name="color"
-                            pattern="^[a-zA-Zа-яА-Я0-9]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я0-9\s]{1,40}"
                             placeholder="Color"
                             autoComplete="off"
                         />
@@ -62,7 +62,7 @@ class FormCarsTable extends React.Component{
                             required
                             type="text"
                             name="num"
-                            pattern="^[a-zA-Z0-9]{1,40}"
+                            pattern="^[a-zA-Z0-9-]{1,40}"
                             placeholder="Car Number"
                             autoComplete="off"
                         />
@@ -77,7 +77,7 @@ class FormCarsTable extends React.Component{
                             required
                             type="text"
                             name="mark"
-                            pattern="^[a-zA-Zа-яА-Я0-9]{1,40}"
+                            pattern="^[a-zA-Zа-яА-Я0-9\s]{1,40}"
                             placeholder="Mark"
                             autoComplete="off"
                         />
