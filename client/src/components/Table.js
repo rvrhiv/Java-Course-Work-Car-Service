@@ -253,7 +253,7 @@ class Table extends Component {
                     columns={ this.columns }
                     noDataIndication={this.handleEmptyTable}
                     bordered={false}
-                    pagination={this.state.loadedData.length <= 10 ? "" : this.pagination}
+                    pagination={this.state.loadedData.length <= 10 ? null : this.pagination}
                     cellEdit={this.cellEdit}
                     selectRow={this.selectRow}
                     hover
