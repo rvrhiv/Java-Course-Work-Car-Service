@@ -1,12 +1,13 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import FormCarsTable from "../forms/FormCarsTable";
 
 function NewItemModal(props) {
+    const {whichTable, ...rest} = props;
+
     return (
         <Modal
-            {...props}
+            {...rest}
             size="lg"
         >
             <Modal.Header closeButton>
@@ -15,11 +16,9 @@ function NewItemModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <FormCarsTable onHide={props.onHide}/>
+                <FormCarsTable onHide={props.onHide} whichTable={whichTable}/>
             </Modal.Body>
             <Modal.Footer>
-                {/*<Button variant="danger" onClick={props.onHide}>Cancel</Button>{' '}*/}
-                {/*<Button variant="primary" type="submit" form="form-cars-table">Add</Button>*/}
             </Modal.Footer>
         </Modal>
     );
