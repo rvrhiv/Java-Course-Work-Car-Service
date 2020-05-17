@@ -63,7 +63,7 @@ class Table extends Component {
             clickToSelect: true,
             clickToEdit: true,
             hideSelectColumn: true,
-            style: {background: '#59a9ff'},
+            style: {background: 'rgb(68,157,255)'},
             selected: [],
             onSelect: (row, isSelect, rowIndex, e) => {
                 if (isSelect) {
