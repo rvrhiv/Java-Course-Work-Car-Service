@@ -15,16 +15,20 @@ class MainPage extends Component {
         }
     }
 
-    componentDidMount() {
-        sessionStorage.setItem("whichButton", "cars");
-    }
-
     buttonMenuClick(buttonName) {
         if (buttonName !== this.state.whichButton) {
             this.setState({
                 whichButton: buttonName
-            })
+            });
             sessionStorage.setItem("whichButton", buttonName);
+        }
+    }
+
+    handleChangeContent = () => {
+        if (this.state.whichButton === null) {
+            return "";
+        } else {
+            return (<PageContent whichContent={this.state.whichButton}/>);
         }
     }
 
@@ -33,14 +37,19 @@ class MainPage extends Component {
             <div>
                 <TopBar />
 
-                <div style={{background: 'none'}} className="mt-5 container-lg">
+                <div style={{background: 'none'}} className="container-fluid">
                     <Row>
-                        <Col md="3" sm="3" style={{background: 'none'}}>
+                        <Col md="2" sm="2"
+                             style={{background: '#F2F2F2', height: '100vh', boxShadow: "inset -3px 3px 5px rgba(0, 0, 0, 0.25)"}}
+                             className="pt-5"
+                        >
                             <h3 style={{textAlign: 'center'}}>Select a table</h3>
-                            <Menu buttonMenuClick={this.buttonMenuClick} activeButton={sessionStorage.getItem("whichButton")}/>
+                            <Menu buttonMenuClick={this.buttonMenuClick} activeButton={this.state.whichButton}/>
                         </Col>
-                        <Col md="8" sm="8">
-                            <PageContent whichContent={sessionStorage.getItem("whichButton")}/>
+                        <Col md="8" sm="8"
+                             className="pt-5"
+                        >
+                            {this.handleChangeContent()}
                         </Col>
                     </Row>
                 </div>
