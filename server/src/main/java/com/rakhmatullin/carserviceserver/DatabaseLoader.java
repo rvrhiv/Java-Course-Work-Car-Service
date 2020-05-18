@@ -1,19 +1,15 @@
 package com.rakhmatullin.carserviceserver;
 
-import com.rakhmatullin.carserviceserver.entity.Cars;
-import com.rakhmatullin.carserviceserver.entity.Masters;
-import com.rakhmatullin.carserviceserver.entity.Services;
-import com.rakhmatullin.carserviceserver.entity.Works;
-import com.rakhmatullin.carserviceserver.repository.CarsRepository;
-import com.rakhmatullin.carserviceserver.repository.MastersRepository;
-import com.rakhmatullin.carserviceserver.repository.ServicesRepository;
-import com.rakhmatullin.carserviceserver.repository.WorksRepository;
+import com.rakhmatullin.carserviceserver.entity.*;
+import com.rakhmatullin.carserviceserver.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.util.List;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
@@ -23,15 +19,22 @@ public class DatabaseLoader implements CommandLineRunner {
     private final ServicesRepository servicesRepository;
     private final WorksRepository worksRepository;
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
     public DatabaseLoader(CarsRepository carsRepository,
                           MastersRepository mastersRepository,
                           ServicesRepository servicesRepository,
-                          WorksRepository worksRepository) {
+                          WorksRepository worksRepository,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.carsRepository = carsRepository;
         this.mastersRepository = mastersRepository;
         this.servicesRepository = servicesRepository;
         this.worksRepository = worksRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -71,5 +74,8 @@ public class DatabaseLoader implements CommandLineRunner {
         worksRepository.save(work2);
         worksRepository.save(work3);
         worksRepository.save(work4);
+
+        userRepository.save(new User("user", passwordEncoder.encode("password"), List.of("ROLE_USER")));
+        userRepository.save(new User("admin", passwordEncoder.encode("admin"), List.of("ROLE_ADMIN")));
     }
 }
