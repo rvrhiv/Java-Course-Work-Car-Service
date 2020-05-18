@@ -42,6 +42,10 @@ public class User implements UserDetails {
         return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
+    public List<String> getRoles() {
+        return roles;
+    }
+
     @Override
     public String getPassword() {
         return password;
