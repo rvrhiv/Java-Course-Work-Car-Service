@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -19,6 +20,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
