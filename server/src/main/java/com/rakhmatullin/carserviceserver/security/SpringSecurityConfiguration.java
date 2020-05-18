@@ -45,13 +45,13 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/cars/**", "/api/masters/**", "/api/services/**", "/api/works/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/api/cars/", "/api/masters/", "/api/works").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.POST, "/api/cars", "/api/masters", "/api/works").hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.PUT, "/api/cars/{id}", "/api/masters/{id}").hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.DELETE, "/api/cars/{id}", "/api/masters/{id}").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/api/services/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/services").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/services/{id}", "/api/works/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/services/{id}", "/api/works/{id}").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));
     }
