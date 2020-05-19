@@ -75,7 +75,7 @@ public class DatabaseLoader implements CommandLineRunner {
         worksRepository.save(work3);
         worksRepository.save(work4);
 
-        userRepository.save(new User("user", passwordEncoder.encode("password"), List.of("ROLE_USER")));
-        userRepository.save(new User("admin", passwordEncoder.encode("admin"), List.of("ROLE_ADMIN")));
+        userRepository.save(new User("user@user", passwordEncoder.encode("password"), List.of("ROLE_USER")));
+        userRepository.save(new User("admin@admin", passwordEncoder.encode("admin"), List.of("ROLE_ADMIN")));
     }
 }

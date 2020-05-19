@@ -3,13 +3,34 @@ import "bootswatch/dist/litera/bootstrap.css"
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import {Redirect} from "react-router-dom"
+import {login} from "../../actions/Login"
 
 class FormLogin extends Component {
     constructor(props) {
         super(props);
+        this.handleLogin = this.handleLogin.bind(this);
         this.state = {
             validated: false,
-            successfulLogin: false
+            successfulLogin: false,
+            message: ""
+        }
+    }
+
+    async handleLogin(user) {
+        try {
+            await login(user).then(object => {
+                localStorage.setItem("username", object.username);
+                localStorage.setItem("token", object.token);
+            });
+            this.setState({
+                successfulLogin: true,
+                message: ""
+            })
+        } catch (error) {
+            this.setState({
+                message: error,
+                validated: false
+            })
         }
     }
 
@@ -19,15 +40,20 @@ class FormLogin extends Component {
             event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
-            this.setState({
-                successfulLogin: true
-            })
-
+            this.handleLogin({
+                username: form.elements.email.value,
+                password: form.elements.password.value
+            }).then();
+            if (this.state.message !== null) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
         }
         this.setState({
             validated: true
         })
     }
+
 
     render() {
         if (this.state.successfulLogin) {
@@ -44,10 +70,12 @@ class FormLogin extends Component {
             >
                 <Card.Header className="bg-primary text-white mb-3 text-center h2">Car Service</Card.Header>
                 <Form.Text className="lead mb-2 text-dark text-center">Sign In</Form.Text>
+                <Form.Text className="mb-1 text-danger text-center">{this.state.message}</Form.Text>
                 <Form.Group className="mx-5">
                     <Form.Control
                         required
                         type="email"
+                        name="email"
                         placeholder="Email"
                     />
                     <Form.Control.Feedback type="valid" className="ml-1">
@@ -63,6 +91,7 @@ class FormLogin extends Component {
                     <Form.Control
                         required
                         type="password"
+                        name="password"
                         placeholder="Password"
                     />
                 </Form.Group>

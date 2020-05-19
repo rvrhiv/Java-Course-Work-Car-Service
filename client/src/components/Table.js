@@ -90,7 +90,7 @@ class Table extends Component {
             await loadData(whichTable).then(array => {
                 array.forEach(object => {
                     data.push(object);
-                 })
+                 });
             });
             this.insertColumnsInTable();
             if (whichTable === "works") {

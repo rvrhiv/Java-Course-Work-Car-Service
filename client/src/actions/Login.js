@@ -7,6 +7,11 @@ export async function login(user) {
         headers: {
             "Content-Type": "application/json",
         }
-    })
-    return await response.json();
+    });
+
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw "Invalid username or password";
+    }
 }
