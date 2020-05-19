@@ -2,12 +2,14 @@ import React, {Component} from "react";
 import "bootswatch/dist/litera/bootstrap.css"
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import {Redirect} from "react-router-dom"
 
 class FormLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            validated: false
+            validated: false,
+            successfulLogin: false
         }
     }
 
@@ -17,6 +19,9 @@ class FormLogin extends Component {
             event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
+            this.setState({
+                successfulLogin: true
+            })
 
         }
         this.setState({
@@ -25,6 +30,10 @@ class FormLogin extends Component {
     }
 
     render() {
+        if (this.state.successfulLogin) {
+            return <Redirect to='/main'/>;
+        }
+
         return(
             <Form
                 noValidate
