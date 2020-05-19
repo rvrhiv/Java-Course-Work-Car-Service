@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import PageContent from "./PageContent";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import {Redirect} from "react-router-dom"
 
 
 class MainPage extends Component {
@@ -11,7 +12,7 @@ class MainPage extends Component {
         super(props);
         this.buttonMenuClick = this.buttonMenuClick.bind(this);
         this.state = {
-            whichButton: sessionStorage.getItem("whichButton")
+            whichButton: sessionStorage.getItem("whichButton"),
         }
     }
 
@@ -33,6 +34,10 @@ class MainPage extends Component {
     }
 
     render() {
+        if (localStorage.getItem("token") === null) {
+            return (<Redirect to="/"/>);
+        }
+
         return (
             <div>
                 <TopBar />
