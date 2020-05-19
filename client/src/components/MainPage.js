@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import TopBar from "./TopBar";
 import Menu from "./Menu";
 import PageContent from "./PageContent";
-import "bootswatch/dist/litera/bootstrap.css"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+
 
 class MainPage extends Component {
     constructor(props) {
