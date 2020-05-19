@@ -34,7 +34,6 @@ class Menu extends Component {
                         <Nav.Item key={option.name} className="mb-1">
                             <Nav.Link
                                 eventKey={option.name}
-                                style={{textAlign: 'left'}}
                             >
                                 {option.value}
                             </Nav.Link>

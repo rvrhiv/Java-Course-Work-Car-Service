@@ -19,6 +19,7 @@ class FormLogin extends Component {
     async handleLogin(user) {
         try {
             await login(user).then(object => {
+                localStorage.setItem("roles", object.roles);
                 localStorage.setItem("username", object.username);
                 localStorage.setItem("token", object.token);
             });
