@@ -11,6 +11,7 @@ export async function addData(whitchTable, data) {
         dataType: "JSON",
         headers: {
             "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         }
     });
 
@@ -50,7 +51,8 @@ export async function addData(whitchTable, data) {
         dataType: "JSON",
         body: JSON.stringify(data),
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         }
     });
     console.log(response.status);

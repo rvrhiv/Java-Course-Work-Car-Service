@@ -5,6 +5,7 @@ export async function deleteData(tableName, id) {
         dataType: "JSON",
         headers: {
             "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         }
     })
     let jsonWorks = await responseWorks.json();
@@ -35,6 +36,7 @@ export async function deleteData(tableName, id) {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         }
     });
     return await response.json();

@@ -8,7 +8,8 @@ export async function updateData(whichTable, data) {
         dataType: "JSON",
         body: JSON.stringify(data),
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         }
     });
 
