@@ -46,7 +46,7 @@ public class CarsController {
         return carsRepository.findById(id)
                 .map(a -> {
                     a.setColor(car.getColor());
-                    a.setIs_foreign(car.is_foreign());
+                    a.setIsForeign(car.getIsForeign());
                     a.setMark(car.getMark());
                     a.setNum(car.getNum());
                     return carsRepository.save(a);

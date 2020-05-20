@@ -20,7 +20,7 @@ public class Cars {
     @NotBlank(message = "Car model(mark) is required.")
     private String mark;
 
-    private boolean is_foreign;
+    private boolean isForeign;
 
     public Cars() {
     }
@@ -28,11 +28,11 @@ public class Cars {
     public Cars(String num,
                 String color,
                 String mark,
-                boolean is_foreign) {
+                boolean isForeign) {
         this.num = num;
         this.color = color;
         this.mark = mark;
-        this.is_foreign = is_foreign;
+        this.isForeign = isForeign;
     }
 
     public long getId() {
@@ -67,12 +67,12 @@ public class Cars {
         this.mark = mark;
     }
 
-    public boolean is_foreign() {
-        return is_foreign;
+    public boolean getIsForeign() {
+        return isForeign;
     }
 
-    public void setIs_foreign(boolean is_foreign) {
-        this.is_foreign = is_foreign;
+    public void setIsForeign(boolean is_foreign) {
+        this.isForeign = is_foreign;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Cars {
                 ", num='" + num + '\'' +
                 ", color='" + color + '\'' +
                 ", mark='" + mark + '\'' +
-                ", is_foreign=" + is_foreign +
+                ", isForeign=" + isForeign +
                 '}';
     }
 }

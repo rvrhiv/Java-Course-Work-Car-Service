@@ -44,8 +44,8 @@ public class DatabaseLoader implements CommandLineRunner {
         mastersRepository.deleteAll();
         servicesRepository.deleteAll();
 
-        Cars bmwI8 = new Cars("A000AA00", "black", "BMW", true);
-        Cars ladaVesta = new Cars("A001AA00", "blue", "LADA", false);
+        Cars bmwI8 = new Cars("A000AA00", "#000000", "BMW", true);
+        Cars ladaVesta = new Cars("A001AA00", "#FFFFFF", "LADA", false);
         carsRepository.save(bmwI8);
         carsRepository.save(ladaVesta);
 
