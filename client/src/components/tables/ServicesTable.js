@@ -172,6 +172,10 @@ class ServicesTable extends Component {
             await deleteData("services", this.rowObjectSelect.id).then()
                 .catch(() => console.log("deleted"));
             await this.setLoadedData("services");
+            this.setState({
+                toastSuccessShow: true,
+                toastSuccessText: "Successful delete!"
+            })
         }
     }
 

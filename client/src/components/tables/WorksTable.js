@@ -227,6 +227,10 @@ class WorksTable extends Component {
             await deleteData("works", this.rowObjectSelect.id).then()
                 .catch(() => console.log("deleted"));
             await this.setLoadedData("works");
+            this.setState({
+                toastSuccessShow: true,
+                toastSuccessText: "Successful delete!"
+            })
         }
     }
 

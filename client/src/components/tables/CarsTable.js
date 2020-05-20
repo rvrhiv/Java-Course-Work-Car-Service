@@ -223,9 +223,14 @@ class CarsTable extends Component {
 
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
-            await deleteData("cars", this.rowObjectSelect.id).then()
+            await deleteData("cars", this.rowObjectSelect.id)
+                .then()
                 .catch(() => console.log("deleted"));
             await this.setLoadedData("cars");
+            this.setState({
+                toastSuccessShow: true,
+                toastSuccessText: "Successful delete!"
+            })
         }
     }
 

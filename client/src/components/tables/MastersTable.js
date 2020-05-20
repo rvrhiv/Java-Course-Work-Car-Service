@@ -149,6 +149,10 @@ class MastersTable extends Component {
             await deleteData("masters", this.rowObjectSelect.id).then()
                 .catch(() => console.log("deleted"));
             await this.setLoadedData("masters");
+            this.setState({
+                toastSuccessShow: true,
+                toastSuccessText: "Successful delete!"
+            })
         }
     }
 
