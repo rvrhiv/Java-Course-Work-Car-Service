@@ -14,5 +14,5 @@ export async function updateData(whichTable, data) {
     });
 
     console.log(response.status);
-    console.log(await response.json());
+    return await response.json();
 }

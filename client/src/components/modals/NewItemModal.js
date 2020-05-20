@@ -10,10 +10,10 @@ function NewItemModal(props) {
     const {whichTable, ...rest} = props;
 
     const formFor = {
-        cars: () => <FormCarsTable onHide={props.onHide} whichTable={whichTable}/>,
-        masters: () => <FormMastersTable onHide={props.onHide} whichTable={whichTable}/>,
-        services: () => <FormServicesTable onHide={props.onHide} whichTable={whichTable}/>,
-        works: () => <FormWorksTable onHide={props.onHide} whitchTable={whichTable}/>
+        cars: (<FormCarsTable onHide={props.onHide} whichTable={whichTable}/>),
+        masters: (<FormMastersTable onHide={props.onHide} whichTable={whichTable}/>),
+        services: (<FormServicesTable onHide={props.onHide} whichTable={whichTable}/>),
+        works: (<FormWorksTable onHide={props.onHide} whitchTable={whichTable}/>)
     };
 
     return (
@@ -27,7 +27,7 @@ function NewItemModal(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {formFor[whichTable]()}
+                {formFor[whichTable]}
             </Modal.Body>
         </Modal>
     );

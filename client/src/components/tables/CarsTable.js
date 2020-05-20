@@ -8,6 +8,9 @@ import paginationFactory from "react-bootstrap-table2-paginator"
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import Button from "react-bootstrap/Button";
 import NewItemModal from "../modals/NewItemModal";
+import "bootswatch/dist/litera/bootstrap.css"
+import Toast from "react-bootstrap/Toast";
+import ColorButton from "../ColorButton";
 
 class CarsTable extends Component {
     constructor(props) {
@@ -22,7 +25,11 @@ class CarsTable extends Component {
 
         this.state = {
             loadedData: [],
-            modalShow: false
+            modalShow: false,
+            toastSuccessShow: false,
+            toastSuccessText: "",
+            toastDangerShow: false,
+            toastDangerText: ""
         }
 
         this.columns = [{
@@ -37,20 +44,39 @@ class CarsTable extends Component {
             dataField: "color",
             text: "Color",
             sort: true,
-            editable: true,
+            editable: false,
             validator: this.validatorColumns,
             headerStyle: {
                 outline: 'none'
-            }
+            },
+            formatter: (cellContent, row) => (
+                <ColorButton
+                    itemRow={row}
+                    onChange={this.handleButtonColorChange}
+                />
+            )
         }, {
-            dataField: "_foreign",
+            dataField: "isForeign",
             text: "Foreign",
             sort: true,
-            editable: true,
-            validator: this.validatorColumns,
+            editable: false,
             headerStyle: {
                 outline: 'none'
-            }
+            },
+            formatter: (cellContent, row) => (
+                <div
+                    className="custom-control custom-checkbox"
+                >
+                    <input
+                        id={row.id}
+                        type="checkbox"
+                        onChange={this.handleCheckbox}
+                        className="custom-control-input"
+                        defaultChecked={row.isForeign}
+                    />
+                    <label className="custom-control-label" htmlFor={row.id}> </label>
+                </div>
+            )
         }, {
             dataField: "mark",
             text: "Mark",
@@ -104,21 +130,15 @@ class CarsTable extends Component {
     }
 
     async componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            await this.setLoadedData("cars");
-        }
+        // if (this.props !== prevProps) {
+        //     await this.setLoadedData("cars");
+        // }
         this.rowObjectSelect = null;
     }
 
     async setLoadedData(whichTable) {
         try {
-            const data = [];
-            await loadData(whichTable).then(array => {
-                array.forEach(object => {
-                    data.push(object);
-                });
-            });
-
+            const data = await loadData(whichTable);
             this.setState({
                 loadedData: data
             });
@@ -145,14 +165,19 @@ class CarsTable extends Component {
         let isValidEdit = false;
         if (this.checkValidTableEdit(newValue, column.dataField)) {
             row[column.dataField] = newValue;
-            updateData("cars", {
-                id: row.id,
-                num: row.num,
-                color: row.color,
-                mark: row.mark,
-                is_foreign: row._foreign
-            }).then();
+            updateData("cars", row)
+                .then(() =>
+                    this.setState({
+                    toastSuccessShow: true,
+                    toastSuccessText: "Successful update " + column.text
+                })
+                );
             isValidEdit = true;
+        } else {
+            this.setState({
+                toastDangerShow: true,
+                toastDangerText: "Failed to update " + column.text + "! you may have entered incorrect data."
+            });
         }
         setTimeout(() => {
             done(isValidEdit);
@@ -160,16 +185,37 @@ class CarsTable extends Component {
         return {async: true};
     }
 
+    handleCheckbox = (event) => {
+        let updatedCar = this.state.loadedData.find(car => car.id.toString() === event.target.id);
+        updatedCar.isForeign = !updatedCar.isForeign;
+        updateData("cars", updatedCar)
+            .then(data =>
+            this.setState({
+                loadedData: this.state.loadedData.map(car => car.id === data.id ? data : car),
+                toastSuccessShow: true,
+                toastSuccessText: "Successful update " + this.columns[2].text
+            })
+        );
+    }
+
+    handleButtonColorChange = (newColor, carRow) => {
+        carRow.color = newColor;
+        updateData("cars", carRow)
+            .then(() => {
+                this.setState({
+                    toastSuccessShow: true,
+                    toastSuccessText: "Successful update " + this.columns[1].text
+                })
+            });
+
+    }
+
     checkValidTableEdit = (newValue, dataField) => {
         switch (dataField) {
-            case "color":
-                return (/^[#]?[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
             case "mark":
                 return (/^[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
             case "num":
                 return (/^[a-zA-Z0-9-]{1,40}/.test(newValue));
-            case "_foreign":
-                return (/(true|false)/.test(newValue));
             default:
                 return false;
         }
@@ -208,6 +254,7 @@ class CarsTable extends Component {
                     pagination={this.state.loadedData.length <= 10 ? null : this.pagination}
                     cellEdit={this.cellEdit}
                     selectRow={this.selectRow}
+                    defaultSorted={[{dataField: "id", order: "asc"}]}
                     hover
                 />
                 {this.handleButtonsView()}
@@ -217,6 +264,35 @@ class CarsTable extends Component {
                     onHide={() => this.setState({modalShow: false})}
                     whichTable="cars"
                 />
+
+                <div style={{position: "absolute", bottom: "10%", right: "40%"}}>
+                    <Toast
+                        show={this.state.toastSuccessShow}
+                        onClose={() => this.setState({toastSuccessShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#01c280"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#01c280"}}>
+                            {this.state.toastSuccessText}
+                        </Toast.Body>
+                    </Toast>
+                    <Toast
+                        show={this.state.toastDangerShow}
+                        onClose={() => this.setState({toastDangerShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#ef5857"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#ef5857"}}>
+                            {this.state.toastDangerText}
+                        </Toast.Body>
+                    </Toast>
+                </div>
             </div>
         );
     }

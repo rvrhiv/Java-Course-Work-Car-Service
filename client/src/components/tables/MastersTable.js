@@ -8,6 +8,7 @@ import paginationFactory from "react-bootstrap-table2-paginator"
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import Button from "react-bootstrap/Button";
 import NewItemModal from "../modals/NewItemModal";
+import Toast from "react-bootstrap/Toast";
 
 class MastersTable extends Component {
     constructor(props) {
@@ -22,7 +23,11 @@ class MastersTable extends Component {
 
         this.state = {
             loadedData: [],
-            modalShow: false
+            modalShow: false,
+            toastSuccessShow: false,
+            toastSuccessText: "",
+            toastDangerShow: false,
+            toastDangerText: ""
         }
 
         this.columns = [{
@@ -77,20 +82,15 @@ class MastersTable extends Component {
     }
 
     async componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            await this.setLoadedData("masters");
-        }
+        // if (this.props !== prevProps) {
+        //     await this.setLoadedData("masters");
+        // }
         this.rowObjectSelect = null;
     }
 
     async setLoadedData(whichTable) {
         try {
-            const data = [];
-            await loadData(whichTable).then(array => {
-                array.forEach(object => {
-                    data.push(object);
-                });
-            });
+            const data = await loadData(whichTable);
             this.setState({
                 loadedData: data
             });
@@ -117,11 +117,17 @@ class MastersTable extends Component {
         let isValidEdit = false;
         if (this.checkValidTableEdit(newValue, column.dataField)) {
             row[column.dataField] = newValue;
-            updateData(this.props.whichTable, {
-                id: row.id,
-                name: row.name
-            });
+            updateData("masters", row).then();
             isValidEdit = true;
+            this.setState({
+                toastSuccessShow: true,
+                toastSuccessText: "Successful update " + column.text
+            });
+        } else {
+            this.setState({
+                toastDangerShow: true,
+                toastDangerText: "Failed to update " + column.text + "! you may have entered incorrect data."
+            });
         }
         setTimeout(() => {
             done(isValidEdit);
@@ -171,6 +177,7 @@ class MastersTable extends Component {
                     pagination={this.state.loadedData.length <= 10 ? null : this.pagination}
                     cellEdit={this.cellEdit}
                     selectRow={this.selectRow}
+                    defaultSorted={[{dataField: "id", order: "asc"}]}
                     hover
                 />
                 {this.handleButtonsView()}
@@ -180,6 +187,34 @@ class MastersTable extends Component {
                     onHide={() => this.setState({modalShow: false})}
                     whichTable="masters"
                 />
+                <div style={{position: "absolute", bottom: "10%", right: "40%"}}>
+                    <Toast
+                        show={this.state.toastSuccessShow}
+                        onClose={() => this.setState({toastSuccessShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#01c280"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#01c280"}}>
+                            {this.state.toastSuccessText}
+                        </Toast.Body>
+                    </Toast>
+                    <Toast
+                        show={this.state.toastDangerShow}
+                        onClose={() => this.setState({toastDangerShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#ef5857"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#ef5857"}}>
+                            {this.state.toastDangerText}
+                        </Toast.Body>
+                    </Toast>
+                </div>
             </div>
         );
     }

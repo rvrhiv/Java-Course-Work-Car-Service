@@ -5,15 +5,15 @@ import {updateData} from "../../actions/UpdateData";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css"
 import BootstrapTable from "react-bootstrap-table-next"
 import paginationFactory from "react-bootstrap-table2-paginator"
-import cellEditFactory from 'react-bootstrap-table2-editor';
+import cellEditFactory, {Type} from 'react-bootstrap-table2-editor';
 import Button from "react-bootstrap/Button";
 import NewItemModal from "../modals/NewItemModal";
+import Toast from "react-bootstrap/Toast";
 
 class WorksTable extends Component {
     constructor(props) {
         super(props);
         this.handleEmptyTable = this.handleEmptyTable.bind(this);
-        this.validatorColumns = this.validatorColumns.bind(this);
         this.handleBeforeSaveCell = this.handleBeforeSaveCell.bind(this);
         this.setLoadedData = this.setLoadedData.bind(this);
         this.handleClickDeleteButton = this.handleClickDeleteButton.bind(this);
@@ -21,8 +21,17 @@ class WorksTable extends Component {
         this.rowObjectSelect = null;
 
         this.state = {
-            loadedData: [],
+            loadedData: {
+                works: [],
+                masters: [],
+                services: [],
+                cars: [],
+            },
             modalShow: false,
+            toastSuccessShow: false,
+            toastSuccessText: "",
+            toastDangerShow: false,
+            toastDangerText: "",
             isAdmin: localStorage.getItem("roles") === "ROLE_ADMIN"
         }
 
@@ -42,6 +51,9 @@ class WorksTable extends Component {
             validator: this.validatorColumns,
             headerStyle: {
                 outline: 'none'
+            },
+            editor: {
+                type: Type.DATE
             }
         }, {
             dataField: "master",
@@ -51,7 +63,20 @@ class WorksTable extends Component {
             validator: this.validatorColumns,
             headerStyle: {
                 outline: 'none'
-            }
+            },
+            formatter: (cellContent, row) => (
+                <select
+                    required
+                    className="custom-select"
+                    defaultValue={row.master.id}
+                    name="master"
+                    onChange={(event) => this.handleSelector(event, row)}
+                >
+                    {this.state.loadedData.masters.map((item) => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                    ))}
+                </select>
+            )
         }, {
             dataField: "service",
             text: "Service",
@@ -60,7 +85,20 @@ class WorksTable extends Component {
             validator: this.validatorColumns,
             headerStyle: {
                 outline: 'none'
-            }
+            },
+            formatter: (cellContent, row) => (
+                <select
+                    required
+                    className="custom-select"
+                    defaultValue={row.service.id}
+                    name="service"
+                    onChange={(event) => this.handleSelector(event, row)}
+                >
+                    {this.state.loadedData.services.map((item) => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                    ))}
+                </select>
+            )
         }, {
             dataField: "car",
             text: "Car",
@@ -69,7 +107,20 @@ class WorksTable extends Component {
             validator: this.validatorColumns,
             headerStyle: {
                 outline: 'none'
-            }
+            },
+            formatter: (cellContent, row) => (
+                <select
+                    required
+                    className="custom-select"
+                    defaultValue={row.car.id}
+                    name="car"
+                    onChange={(event) => this.handleSelector(event, row)}
+                >
+                    {this.state.loadedData.cars.map((item) => (
+                        <option key={item.id} value={item.id}>{item.num}</option>
+                    ))}
+                </select>
+            )
         }];
 
         this.pagination = paginationFactory({
@@ -103,38 +154,41 @@ class WorksTable extends Component {
     }
 
     async componentDidMount() {
-        await this.setLoadedData("works");
+        await this.loadAllData();
     }
 
     async componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            await this.setLoadedData("works");
-        }
         this.rowObjectSelect = null;
+    }
+
+    loadAllData = async () => {
+        try {
+            const cars = await loadData("cars");
+            const masters = await loadData("masters");
+            const services = await loadData("services");
+            const works = await loadData("works");
+            this.setState({
+                loadedData: {
+                    works,
+                    masters,
+                    services,
+                    cars
+                }
+            })
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async setLoadedData(whichTable) {
         try {
-            const data = [];
-            await loadData(whichTable).then(array => {
-                array.forEach(object => {
-                    data.push(object);
-                });
-            });
-            //меняем поля-объекты на определенные поля этих объектов
-            const workData = [];
-            data.map(item => (
-                workData.push({
-                    id: item.id,
-                    date_work: item.date_work,
-                    car: item.car.num,
-                    master: item.master.name,
-                    service: item.service.name
-                })
-            ));
+            const data = await loadData(whichTable)
+            const temp = this.state.loadedData;
+            temp[whichTable] = data
             this.setState({
-                loadedData: workData
+                loadedDataWork: temp
             });
+
         } catch (error) {
             console.log(error);
         }
@@ -144,46 +198,29 @@ class WorksTable extends Component {
         return (<div>Table is Empty :(</div>);
     }
 
-    validatorColumns(newValue, row, column) {
-        if (newValue.toString().length >= 40) {
-            return {
-                valid: false,
-                message: "Too many characters!"
-            }
-        }
-        return true;
-    }
-
     handleBeforeSaveCell(oldValue, newValue, row, column, done) {
-        let isValidEdit = true;
-        // if (this.checkValidTableEdit(newValue, column.dataField)) {
-        //     row[column.dataField] = newValue;
-        //     updateData(this.props.whichTable, {
-        //         id: row.id,
-        //         name: row.name,
-        //         cost_our: row.cost_our,
-        //         cost_foreign: row.cost_foreign
-        //     });
-        //     isValidEdit = true;
-        // }
+        let isValidEdit = false;
+        if (newValue !== "") {
+            updateData("works", row)
+                .then(() => (
+                    this.setState({
+                        toastSuccessShow: true,
+                        toastSuccessText: "Successful update Date of work!"
+                    })
+                ))
+                .catch((error) => (
+                    this.setState({
+                        toastDangerShow: true,
+                        toastDangerText: "Failed to update Date of Work! " + error
+                    })
+                ));
+            isValidEdit = true;
+        }
         setTimeout(() => {
             done(isValidEdit);
         }, 0);
         return {async: true};
     }
-
-    // checkValidTableEdit = (newValue, dataField) => {
-    //     switch (dataField) {
-    //         case "name":
-    //             return (/^[a-zA-Zа-яА-Я0-9\s]{1,40}/.test(newValue));
-    //         case "cost_foreign":
-    //             return (/^[0-9]{1,10}/.test(newValue));
-    //         case "cost_our":
-    //             return (/^[0-9]{1,10}/.test(newValue));
-    //         default:
-    //             return false;
-    //     }
-    // }
 
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
@@ -191,6 +228,28 @@ class WorksTable extends Component {
                 .catch(() => console.log("deleted"));
             await this.setLoadedData("works");
         }
+    }
+
+    handleSelector = (event, row) => {
+        const name = event.target.name;
+        const updatedRow = {
+            ...row,
+            [name]: {
+                id: event.target.value
+            }
+        }
+        updateData("works", updatedRow)
+            .then(() => (
+                this.setState({
+                    toastSuccessShow: true,
+                    toastSuccessText: "Successful update " + name + "!"
+                })
+            )).catch((error) => (
+                this.setState({
+                    toastDangerShow: true,
+                    toastDangerText: "Failed to update " + event.target.name + "! " + error
+                })
+        ));
     }
 
     handleButtonsView = () => {
@@ -216,13 +275,14 @@ class WorksTable extends Component {
                 <BootstrapTable
                     bootstrap4
                     keyField='id'
-                    data={this.state.loadedData}
+                    data={this.state.loadedData.works}
                     columns={this.columns}
                     noDataIndication={this.handleEmptyTable}
                     bordered={false}
-                    pagination={this.state.loadedData.length <= 10 ? null : this.pagination}
+                    pagination={this.state.loadedData.works.length <= 10 ? null : this.pagination}
                     cellEdit={this.cellEdit}
                     selectRow={this.selectRow}
+                    defaultSorted={[{dataField: "id", order: "asc"}]}
                     hover
                 />
                 {this.handleButtonsView()}
@@ -232,6 +292,34 @@ class WorksTable extends Component {
                     onHide={() => this.setState({modalShow: false})}
                     whichTable="works"
                 />
+                <div style={{position: "absolute", bottom: "10%", right: "40%"}}>
+                    <Toast
+                        show={this.state.toastSuccessShow}
+                        onClose={() => this.setState({toastSuccessShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#01c280"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#01c280"}}>
+                            {this.state.toastSuccessText}
+                        </Toast.Body>
+                    </Toast>
+                    <Toast
+                        show={this.state.toastDangerShow}
+                        onClose={() => this.setState({toastDangerShow: false})}
+                        delay={2000}
+                        autohide
+                    >
+                        <Toast.Header style={{background: "#ef5857"}}>
+                            <strong className="mr-auto text-dark">Info</strong>
+                        </Toast.Header>
+                        <Toast.Body style={{background: "#ef5857"}}>
+                            {this.state.toastDangerText}
+                        </Toast.Body>
+                    </Toast>
+                </div>
             </div>
         );
     }
