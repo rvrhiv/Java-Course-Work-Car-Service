@@ -104,9 +104,6 @@ class FormWorksTable extends React.Component{
     }
 
     render() {
-        console.log(this.state.cars);
-        console.log(this.state.masters);
-        console.log(this.state.services);
         return (
             <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                 <Form.Row>

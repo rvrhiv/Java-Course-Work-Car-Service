@@ -20,9 +20,8 @@ class FormMastersTable extends React.Component{
             event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
-            const nameLine = form.elements.first_name.value + " " + form.elements.last_name.value;
             const master = {
-                name: nameLine
+                name: form.elements.first_name.value + " " + form.elements.last_name.value
             }
             addData(this.props.whichTable, master)
                 .then()

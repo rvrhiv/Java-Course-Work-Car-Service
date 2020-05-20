@@ -5,12 +5,14 @@ import Col from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
 import NavItem from "react-bootstrap/NavItem";
 import {addData} from "../../actions/AddData";
+import ColorButton from "../ColorButton";
 
-class FormCarsTable extends React.Component{
+class FormCarsTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            validated: false
+            validated: false,
+            color: "#000000"
         }
     }
 
@@ -22,9 +24,9 @@ class FormCarsTable extends React.Component{
         } else if (form.checkValidity() === true) {
             const car = {
                 num: form.elements.num.value,
-                color: form.elements.color.value,
+                color: this.state.color,
                 mark: form.elements.mark.value,
-                is_foreign: form.elements.is_foreign.checked
+                isForeign: form.elements.isForeign.checked
             }
             addData(this.props.whichTable, car)
                 .then()
@@ -35,26 +37,15 @@ class FormCarsTable extends React.Component{
         })
     }
 
+    handlerColorButton = (newColor, carRow) => {
+        this.setState({
+            color: newColor
+        })
+    }
+
     render() {
         return (
             <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
-                <Form.Row>
-                    <Form.Group as={Col} md="6" controlId="validationCustom01">
-                        <Form.Label>Color</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            name="color"
-                            pattern="^[#]?[a-zA-Zа-яА-Я0-9\s]{1,40}"
-                            placeholder="Color"
-                            autoComplete="off"
-                        />
-                        <Form.Control.Feedback type="valid">All right!</Form.Control.Feedback>
-                        <Form.Control.Feedback type="invalid">
-                            This field is required! Maximum length 40 characters.
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col} md="3" controlId="validationCustom03">
                         <Form.Label>Car Number</Form.Label>
@@ -87,14 +78,19 @@ class FormCarsTable extends React.Component{
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Form.Row>
-                <Form.Group className="ml-1">
+                <Form.Row className="ml-1">
+                    <ColorButton
+                        itemRow={{color: this.state.color}}
+                        onChange={this.handlerColorButton}
+                    />
+                    <Form.Label className="ml-2 mr-5">Color</Form.Label>
                     <Form.Check
                         type="switch"
-                        name="is_foreign"
+                        name="isForeign"
                         id="custom-switch"
                         label="Is foreign?"
-                    />
-                </Form.Group>
+                        />
+                </Form.Row>
                 <Navbar className="justify-content-end">
                     <NavItem className="ml-1">
                         <Button variant="danger" onClick={this.props.onHide}>Cancel</Button>
