@@ -225,12 +225,14 @@ class WorksTable extends Component {
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
             await deleteData("works", this.rowObjectSelect.id).then()
-                .catch(() => console.log("deleted"));
+                .catch(() => {
+                    console.log("deleted");
+                    this.setState({
+                        toastSuccessShow: true,
+                        toastSuccessText: "Successful delete!"
+                    })
+                });
             await this.setLoadedData("works");
-            this.setState({
-                toastSuccessShow: true,
-                toastSuccessText: "Successful delete!"
-            })
         }
     }
 
@@ -272,6 +274,18 @@ class WorksTable extends Component {
         }
     }
 
+    handleModal = (newWork) => {
+        this.setState({
+            modalShow: false
+        })
+        if (newWork) {
+            this.state.loadedData.works.push(newWork);
+            this.setState({
+                loadedData: this.state.loadedData
+            });
+        }
+    }
+
     render() {
         return (
             <div>
@@ -293,7 +307,7 @@ class WorksTable extends Component {
 
                 <NewItemModal
                     show={this.state.modalShow}
-                    onHide={() => this.setState({modalShow: false})}
+                    onHide={this.handleModal}
                     whichTable="works"
                 />
                 <div style={{position: "absolute", bottom: "10%", right: "40%"}}>

@@ -27,7 +27,7 @@ export async function addData(whitchTable, data) {
 
         if (alreadyExists) {
             alert("Record with " + whitchTable + " " + fields[whitchTable] + ": " + data[fields[whitchTable]] + " already exists. Record don't will be added.");
-            return;
+            return null;
         }
     } else if (whitchTable === "works") {
         let alreadyExists = false;
@@ -42,7 +42,7 @@ export async function addData(whitchTable, data) {
 
         if (alreadyExists) {
             alert("Record with this work already exists. Record don't will be added.");
-            return;
+            return null;
         }
     }
 
@@ -56,5 +56,5 @@ export async function addData(whitchTable, data) {
         }
     });
     console.log(response.status);
-    console.log(await response.json());
+    return await response.json();
 }

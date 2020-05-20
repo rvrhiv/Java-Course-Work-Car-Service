@@ -15,16 +15,16 @@ class FormMastersTable extends React.Component{
     }
 
     handleSubmit = (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
             const master = {
                 name: form.elements.first_name.value + " " + form.elements.last_name.value
             }
             addData(this.props.whichTable, master)
-                .then()
+                .then(this.props.onHide)
                 .catch(message => console.log(message));
         }
         this.setState({
@@ -69,7 +69,7 @@ class FormMastersTable extends React.Component{
                 </Form.Row>
                 <Navbar className="justify-content-end">
                     <NavItem className="ml-1">
-                        <Button variant="danger" onClick={this.props.onHide}>Cancel</Button>
+                        <Button variant="danger" onClick={() => this.props.onHide(null)}>Cancel</Button>
                     </NavItem>
                     <NavItem className="ml-1">
                         <Button type="submit" variant="primary">Submit form</Button>

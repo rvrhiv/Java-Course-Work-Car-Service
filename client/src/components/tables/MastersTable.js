@@ -147,12 +147,14 @@ class MastersTable extends Component {
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
             await deleteData("masters", this.rowObjectSelect.id).then()
-                .catch(() => console.log("deleted"));
+                .catch(() => {
+                    console.log("deleted");
+                    this.setState({
+                        toastSuccessShow: true,
+                        toastSuccessText: "Successful delete!"
+                    })
+                });
             await this.setLoadedData("masters");
-            this.setState({
-                toastSuccessShow: true,
-                toastSuccessText: "Successful delete!"
-            })
         }
     }
 
@@ -164,6 +166,18 @@ class MastersTable extends Component {
             </div>);
         } else {
             return "";
+        }
+    }
+
+    handleModal = (newMaster) => {
+        this.setState({
+            modalShow: false
+        })
+        if (newMaster) {
+            this.state.loadedData.push(newMaster);
+            this.setState({
+                loadedData: this.state.loadedData
+            });
         }
     }
 
@@ -188,7 +202,7 @@ class MastersTable extends Component {
 
                 <NewItemModal
                     show={this.state.modalShow}
-                    onHide={() => this.setState({modalShow: false})}
+                    onHide={this.handleModal}
                     whichTable="masters"
                 />
                 <div style={{position: "absolute", bottom: "10%", right: "40%"}}>

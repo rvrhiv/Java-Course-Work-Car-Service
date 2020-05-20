@@ -170,12 +170,14 @@ class ServicesTable extends Component {
     async handleClickDeleteButton() {
         if (this.rowObjectSelect !== null) {
             await deleteData("services", this.rowObjectSelect.id).then()
-                .catch(() => console.log("deleted"));
+                .catch(() => {
+                    console.log("deleted");
+                    this.setState({
+                        toastSuccessShow: true,
+                        toastSuccessText: "Successful delete!"
+                    })
+                });
             await this.setLoadedData("services");
-            this.setState({
-                toastSuccessShow: true,
-                toastSuccessText: "Successful delete!"
-            })
         }
     }
 
@@ -190,6 +192,18 @@ class ServicesTable extends Component {
                 </div>);
             default:
                 return "";
+        }
+    }
+
+    handleModal = (newService) => {
+        this.setState({
+            modalShow: false
+        })
+        if (newService) {
+            this.state.loadedData.push(newService);
+            this.setState({
+                loadedData: this.state.loadedData
+            });
         }
     }
 
@@ -214,7 +228,7 @@ class ServicesTable extends Component {
 
                 <NewItemModal
                     show={this.state.modalShow}
-                    onHide={() => this.setState({modalShow: false})}
+                    onHide={this.handleModal}
                     whichTable="services"
                 />
                 <div style={{position: "absolute", bottom: "10%", right: "40%"}}>

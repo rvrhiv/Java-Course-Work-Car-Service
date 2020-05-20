@@ -17,9 +17,9 @@ class FormCarsTable extends React.Component {
     }
 
     handleSubmit = (event) => {
-        const form = event.currentTarget;
+        event.preventDefault();
+        const form = event.target;
         if (form.checkValidity() === false) {
-            event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
             const car = {
@@ -29,7 +29,7 @@ class FormCarsTable extends React.Component {
                 isForeign: form.elements.isForeign.checked
             }
             addData(this.props.whichTable, car)
-                .then()
+                .then(this.props.onHide)
                 .catch(message => console.log(message));
         }
         this.setState({
@@ -93,7 +93,7 @@ class FormCarsTable extends React.Component {
                 </Form.Row>
                 <Navbar className="justify-content-end">
                     <NavItem className="ml-1">
-                        <Button variant="danger" onClick={this.props.onHide}>Cancel</Button>
+                        <Button variant="danger" onClick={() => this.props.onHide(null)}>Cancel</Button>
                     </NavItem>
                     <NavItem className="ml-1">
                         <Button type="submit" variant="primary">Submit form</Button>

@@ -27,24 +27,9 @@ class FormWorksTable extends React.Component{
 
     async loadData() {
         try {
-            const carsData = [];
-            await loadData("cars").then(array => {
-                array.forEach(object => {
-                    carsData.push(object);
-                })
-            });
-            const mastersData = [];
-            await loadData("masters").then(array => {
-                array.forEach(object => {
-                    mastersData.push(object);
-                })
-            });
-            const servicesData = [];
-            await loadData("services").then(array => {
-                array.forEach(object => {
-                    servicesData.push(object);
-                })
-            });
+            const carsData = await loadData("cars")
+            const mastersData = await loadData("masters")
+            const servicesData = await loadData("services")
             this.setState({
                 cars: carsData,
                 masters: mastersData,
@@ -56,9 +41,9 @@ class FormWorksTable extends React.Component{
     }
 
     handleSubmit = (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
             event.stopPropagation();
         } else if (form.checkValidity() === true) {
             var selectedCar = null;
@@ -76,7 +61,6 @@ class FormWorksTable extends React.Component{
                     selectedMaster = item;
                 }
             });
-            console.log(selectedMaster);
 
             var selectedService = null;
             this.state.services.forEach((item) => {
@@ -95,7 +79,7 @@ class FormWorksTable extends React.Component{
             };
 
             addData(this.props.whitchTable, work)
-                .then()
+                .then(this.props.onHide)
                 .catch(message => console.log(message));
         }
         this.setState({
@@ -160,7 +144,7 @@ class FormWorksTable extends React.Component{
                 </Form.Row>
                 <Navbar className="justify-content-end">
                     <NavItem className="ml-1">
-                        <Button variant="danger" onClick={this.props.onHide}>Cancel</Button>
+                        <Button variant="danger" onClick={() => this.props.onHide(null)}>Cancel</Button>
                     </NavItem>
                     <NavItem className="ml-1">
                         <Button type="submit" variant="primary">Submit form</Button>

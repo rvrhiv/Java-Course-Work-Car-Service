@@ -225,12 +225,14 @@ class CarsTable extends Component {
         if (this.rowObjectSelect !== null) {
             await deleteData("cars", this.rowObjectSelect.id)
                 .then()
-                .catch(() => console.log("deleted"));
+                .catch((error) => {
+                    console.log("deleted");
+                    this.setState({
+                        toastSuccessShow: true,
+                        toastSuccessText: "Successful delete!"
+                    })
+                });
             await this.setLoadedData("cars");
-            this.setState({
-                toastSuccessShow: true,
-                toastSuccessText: "Successful delete!"
-            })
         }
     }
 
@@ -242,6 +244,18 @@ class CarsTable extends Component {
             </div>);
         } else {
             return "";
+        }
+    }
+
+    handleModal = (newCar) => {
+        this.setState({
+            modalShow: false
+        })
+        if (newCar) {
+            this.state.loadedData.push(newCar);
+            this.setState({
+                loadedData: this.state.loadedData
+            });
         }
     }
 
@@ -266,7 +280,7 @@ class CarsTable extends Component {
 
                 <NewItemModal
                     show={this.state.modalShow}
-                    onHide={() => this.setState({modalShow: false})}
+                    onHide={this.handleModal}
                     whichTable="cars"
                 />
 
